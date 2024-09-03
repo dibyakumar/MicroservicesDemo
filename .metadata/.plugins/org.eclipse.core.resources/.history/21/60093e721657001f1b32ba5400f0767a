@@ -1,0 +1,13 @@
+spring.application.name=ApiGateWay
+
+server.port= 8083
+
+# registering our service
+spring.cloud.gateway.routes[0].id=QUIZSERVICE
+# link to the service 
+# using lb for load balancing and QUIZSERVICE is the application name of that service 
+spring.cloud.gateway.routes[0].uri=lb://QUIZSERVICE
+# setting the path to identify between different application services 
+# /quiz/** means aything starting with quiz 
+# we can give multiple comma separated paths 
+spring.cloud.gateway.routes[0].predicates[0]=Path=/quiz/** 

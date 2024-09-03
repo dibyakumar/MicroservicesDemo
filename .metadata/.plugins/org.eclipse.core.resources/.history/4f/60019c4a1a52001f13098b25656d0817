@@ -1,0 +1,44 @@
+package com.quiz.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.quiz.entity.Quiz;
+import com.quiz.repository.QuizRepository;
+
+@Service
+public class QuizService {
+	@Autowired
+	private QuizRepository quizRepository;
+	
+	@Autowired
+	private QuestionClient questionClient;
+	
+	public Quiz add(Quiz q) {
+		return quizRepository.save(q);
+	}
+	
+	public List<Quiz> get(){
+		return quizRepository.findAll();
+	}
+	
+	public Quiz get(Long id) {
+		return quizRepository.findById(id).orElseThrow(()-> new RuntimeException("No Quiz Found with the id provided !!"));
+	}
+	
+	public List<Quiz> QuizWithQuestion(){
+		
+		List<Quiz> allQuizes = quizRepository.findAll();
+		allQuizes.stream().map(q->{
+			q.setQuestions(questionClient.getQuestions(q.getId()))
+			return q;
+		}
+				).collect(Collectors.toList());
+		}
+		
+	}
+
+}
